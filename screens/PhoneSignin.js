@@ -1,0 +1,67 @@
+import React, { useState, useEffect } from 'react';
+import { Button, TextInput, ToastAndroid } from 'react-native';
+import {Input} from '@rneui/themed'
+import auth from '@react-native-firebase/auth';
+
+function PhoneSignIn() {
+  // If null, no SMS has been sent
+  const [confirm, setConfirm] = useState(null);
+  const [phone, setPhone] = useState('');
+
+  // verification code (OTP - One-Time-Passcode)
+  const [code, setCode] = useState('');
+
+  // Handle login
+  function onAuthStateChanged(user) {
+    if (user) {
+      // Some Android devices can automatically process the verification code (OTP) message, and the user would NOT need to enter the code.
+      // Actually, if he/she tries to enter it, he/she will get an error message because the code was already used in the background.
+      // In this function, make sure you hide the component(s) for entering the code and/or navigate away from this screen.
+      // It is also recommended to display a message to the user informing him/her that he/she has successfully logged in.
+    }
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  // Handle the button press
+  async function signInWithPhoneNumber(phoneNumber) {
+    const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+    setConfirm(confirmation);
+  }
+
+  async function confirmCode() {
+    try {
+      let d = await confirm.confirm(code);
+      console.log(d);
+    } catch (error) {
+      console.log('Invalid code.');
+    }
+  }
+
+  if (!confirm) {
+    return (
+      <>
+        <Input onChangeText={(newPhone)=> { setPhone(newPhone) }} />
+        <Button
+          title="Phone? Number Sign In log"
+          onPress={() => {
+            signInWithPhoneNumber(phone);
+            ToastAndroid.show(`phone number is ${phone}`, ToastAndroid.SHORT);
+          }}
+        />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <TextInput value={code} onChangeText={text => setCode(text)} />
+      <Button title="Confirm Code" onPress={() => confirmCode()} />
+    </>
+  );
+}
+
+export default PhoneSignIn;

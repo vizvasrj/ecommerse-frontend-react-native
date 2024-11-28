@@ -1,0 +1,23 @@
+POST /v2/user/order HTTP/1.1
+Host: localhost:8002
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InhAYS5pbyIsInVpZCI6MSwiZXhwIjoxNzEwODI5MzMwfQ.FWzTv91FPBqjDA_576AjmBlgkeRQvaWpX35vSpzrDaQ
+Content-Length: 289
+
+{
+    "payment_method_id": "2",
+    "shipping_address_id": "28",
+    "shipping_method_id": "1",
+    "products": [
+        {
+            "product_item_id": "63",
+            "quantity": 2
+        },
+        {
+            "product_item_id": "64",
+            "quantity": 3
+        }
+    ]
+
+
+}
